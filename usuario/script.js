@@ -201,6 +201,63 @@ document.addEventListener('DOMContentLoaded', function() {
         toggleCart()
     })
 
+    // --- Confirm Order Modal Logic ---
+    const finalizarPedidoBtn = document.querySelector('.cart-checkout')
+    const confirmOrderModal = document.getElementById('confirmOrderModal')
+    const confirmOrderItems = document.getElementById('confirmOrderItems')
+    const payBtn = document.getElementById('payBtn')
+    const cancelOrderBtn = document.getElementById('cancelOrderBtn')
+    const paymentBtns = document.querySelectorAll('.payment-btn')
+    let selectedPayment = null
+
+    if (finalizarPedidoBtn && confirmOrderModal) {
+        finalizarPedidoBtn.addEventListener('click', (e) => {
+            e.preventDefault()
+            // Populate items
+            confirmOrderItems.innerHTML = ''
+            if (cart.items.length === 0) {
+                confirmOrderItems.innerHTML = '<p>El carrito está vacío.</p>'
+            } else {
+                let html = '<ul class="confirm-items-list">'
+                cart.items.forEach(item => {
+                    html += `<li><span>${item.name}</span> <span>x${item.quantity}</span> <span>$${(item.price * item.quantity).toFixed(2)}</span></li>`
+                })
+                html += '</ul>'
+                html += `<div class="confirm-total"><b>Total:</b> $${cart.total.toFixed(2)}</div>`
+                confirmOrderItems.innerHTML = html
+            }
+            // Reset note and payment
+            document.getElementById('orderNote').value = ''
+            selectedPayment = null
+            paymentBtns.forEach(btn => btn.classList.remove('active'))
+            confirmOrderModal.showModal()
+        })
+
+        // Payment method selection
+        paymentBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                paymentBtns.forEach(b => b.classList.remove('active'))
+                btn.classList.add('active')
+                selectedPayment = btn.getAttribute('data-method')
+            })
+        })
+
+        // Cancel
+        cancelOrderBtn.addEventListener('click', () => {
+            confirmOrderModal.close()
+        })
+
+        // Pay
+        payBtn.addEventListener('click', () => {
+            if (!selectedPayment) {
+                alert('Por favor, selecciona un método de pago.')
+                return
+            }
+            // Optionally, you could send order details to the server here
+            window.location.href = 'comprobantes.php'
+        })
+    }
+
     // Cerrar carrito con boton X
     closeCart.addEventListener('click', (e) => {
         e.stopPropagation()

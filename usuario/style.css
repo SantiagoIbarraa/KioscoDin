@@ -79,12 +79,20 @@ body {
 }
 
 @keyframes letterBounce {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
-    100% { transform: translateY(0); }
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
 }
 
-h1{
+h1 {
     font-family: 'Backso';
 }
 
@@ -92,8 +100,8 @@ h1{
     color: white;
     letter-spacing: 8px;
     font-weight: 700;
-    text-shadow: 4px 4px 0px rgba(255, 210, 48, 0.7), 
-                 6px 6px 0px rgba(0, 0, 0, 0.2);
+    text-shadow: 4px 4px 0px rgba(255, 210, 48, 0.7),
+        6px 6px 0px rgba(0, 0, 0, 0.2);
     position: relative;
     animation: letterBounce 1s ease-in-out infinite;
 
@@ -149,7 +157,7 @@ h1{
     justify-content: flex-start;
     min-height: 340px;
     background: #fff;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     overflow: hidden;
     height: 100%;
@@ -302,7 +310,7 @@ h1{
     z-index: 100;
 }
 
-.side-menu-toggle:hover + .side-menu,
+.side-menu-toggle:hover+.side-menu,
 .side-menu:hover {
     left: 0;
 }
@@ -521,7 +529,8 @@ h1{
     gap: 10px;
 }
 
-.comprar-btn, .volver-btn {
+.comprar-btn,
+.volver-btn {
     padding: 12px 25px;
     border: none;
     border-radius: 25px;
@@ -550,11 +559,25 @@ h1{
 }
 
 @keyframes cartShake {
-    0% { transform: rotate(0deg); }
-    25% { transform: rotate(-10deg); }
-    50% { transform: rotate(10deg); }
-    75% { transform: rotate(-5deg); }
-    100% { transform: rotate(0deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(-10deg);
+    }
+
+    50% {
+        transform: rotate(10deg);
+    }
+
+    75% {
+        transform: rotate(-5deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
 }
 
 .cart-shake {
@@ -658,6 +681,7 @@ h1{
         height: 50px;
         padding: 0 2px;
     }
+
     .header h1 {
         font-size: 0.9rem;
         letter-spacing: 0.5px;
@@ -665,7 +689,8 @@ h1{
 }
 
 /* Prevent overflows */
-html, body {
+html,
+body {
     max-width: 100vw;
     overflow-x: hidden;
 }
@@ -677,6 +702,7 @@ html, body {
         gap: 10px;
         padding: 0 6px;
     }
+
     .category {
         width: 45vw;
         min-width: 150px;
@@ -684,12 +710,14 @@ html, body {
         min-height: 220px;
     }
 }
+
 @media (max-width: 600px) {
     .category-container {
         flex-direction: column;
         gap: 10px;
         padding: 0 2px;
     }
+
     .category {
         width: 100%;
         min-width: 0;
@@ -697,6 +725,7 @@ html, body {
         min-height: 180px;
     }
 }
+
 @media (min-width: 1200px) {
     .category-container {
         max-width: 1100px;
@@ -704,4 +733,158 @@ html, body {
         justify-items: start;
         justify-content: start;
     }
+}
+
+
+dialog#confirmOrderModal {
+    max-width: 400px;
+    width: 90%;
+    padding: 0;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+    background: #fff;
+    font-family: inherit;
+    z-index: 1001;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+dialog#confirmOrderModal[open] {
+    display: flex;
+    animation: fadeIn 0.18s;
+}
+
+dialog#confirmOrderModal::backdrop {
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(2px);
+}
+
+dialog#confirmOrderModal[open] {
+    animation: fadeIn 0.18s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+#confirmOrderForm {
+    padding: 24px 18px 18px 18px;
+}
+
+#confirmOrderModal h2 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    font-size: 1.4em;
+    text-align: center;
+}
+
+.confirm-items-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 12px 0;
+}
+
+.confirm-items-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 1em;
+}
+
+.confirm-total {
+    text-align: right;
+    font-size: 1.1em;
+    margin-bottom: 16px;
+}
+
+.modal-section {
+    margin-bottom: 14px;
+}
+
+#orderNote {
+    width: 100%;
+    min-height: 40px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    padding: 6px;
+    font-size: 1em;
+}
+
+.payment-methods {
+    display: flex;
+    gap: 10px;
+    margin-top: 6px;
+}
+
+.payment-btn {
+    flex: 1;
+    padding: 8px 0;
+    border: 1.5px solid #bbb;
+    background: #fafafa;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.payment-btn.active,
+.payment-btn:focus {
+    border-color: #4CAF50;
+    background: #eaffea;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.modal-pay {
+    background: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 22px;
+    font-size: 1em;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.18s;
+}
+
+.modal-pay:hover {
+    background: #388e3c;
+}
+
+.modal-cancel {
+    background: #eee;
+    color: #444;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.18s;
+}
+
+.modal-cancel:hover {
+    background: #ddd;
 }

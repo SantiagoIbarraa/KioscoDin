@@ -129,7 +129,30 @@ $extras = getProductsByType($conn, 'extra');
     </div>
     
     <?php renderCartModal(); ?>
-    
+
+    <!-- Confirm Order Modal -->
+    <dialog id="confirmOrderModal">
+        <form method="dialog" id="confirmOrderForm">
+            <h2>Confirmar Pedido</h2>
+            <div id="confirmOrderItems"></div>
+            <div class="modal-section">
+                <label for="orderNote">Nota para el pedido:</label>
+                <textarea id="orderNote" name="orderNote" rows="2" maxlength="200" placeholder="Agrega una nota..."></textarea>
+            </div>
+            <div class="modal-section">
+                <label>Método de pago:</label>
+                <div class="payment-methods">
+                    <button type="button" class="payment-btn" data-method="Efectivo">Efectivo</button>
+                    <button type="button" class="payment-btn" data-method="Tarjeta">Tarjeta</button>
+                    <button type="button" class="payment-btn" data-method="MercadoPago">MercadoPago</button>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button id="payBtn" type="button" class="modal-pay">Pagar</button>
+                <button id="cancelOrderBtn" type="button" class="modal-cancel">Cancelar</button>
+            </div>
+        </form>
+    </dialog>
     <script src="script.js"></script>
 </body>
 </html>
