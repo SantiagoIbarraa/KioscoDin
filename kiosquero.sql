@@ -61,8 +61,10 @@ CREATE TABLE `productos` (
   `descripcion` varchar(300) NOT NULL,
   `stock` int(11) NOT NULL,
   `fecha_agregado` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `tipo_producto` enum('ensalada','carne','bebida','extra') NOT NULL
+  `tipo_producto` enum('ensalada','carne','bebida','extra') NOT NULL,
+  `precio` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 -- --------------------------------------------------------
 

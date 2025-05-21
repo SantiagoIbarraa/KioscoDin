@@ -7,7 +7,7 @@ if (isset($_SESSION['usuario_id'])) {
     if ($_SESSION['rol'] === 'usuario') {
         header("Location: usuario/index.php");
     } elseif ($_SESSION['rol'] === 'kiosquero') {
-        header("Location: kiosquiero/index.php");
+        header("Location: kiosquero/index.php");
     } elseif ($_SESSION['rol'] === 'admin') {
         header("Location: administrador.php");
     }
@@ -17,7 +17,7 @@ if (isset($_SESSION['usuario_id'])) {
 // Procesar el formulario de login
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Conexión a la base de datos
-    $conn = new mysqli("localhost", "root", "", "kiosquiero");
+    $conn = new mysqli("localhost", "root", "", "kiosquero");
     
     // Verificar la conexión
     if ($conn->connect_error) {
@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
     
     // Buscar usuario en la base de datos
-    $stmt = $conn->prepare("SELECT nombre, mail, contraseña, rol FROM sesion WHERE mail = ?");
+    $stmt = $conn->prepare("SELECT nombre, mail, contraseña, rol FROM usuario WHERE mail = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($user['rol'] === 'usuario') {
                 header("Location: usuario/index.php");
             } elseif ($user['rol'] === 'kiosquero') {
-                header("Location: kiosquiero/index.php");
+                header("Location: kiosquero/index.php");
             } elseif ($user['rol'] === 'admin') {
                 header("Location: administrador.php");
             }

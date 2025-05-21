@@ -6,6 +6,31 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['rol'] !== 'usuario') {
     header("Location: ../login.php");
     exit();
 }
+
+// Incluir conexión a la base de datos
+require_once 'db_connect.php';
+
+// Obtener productos por tipo
+function getProductsByType($conn, $tipo) {
+    $sql = "SELECT * FROM productos WHERE tipo_producto = ? AND stock > 0";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $tipo);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    $productos = [];
+    while($row = $result->fetch_assoc()) {
+        $productos[] = $row;
+    }
+    
+    return $productos;
+}
+
+// Obtener productos por tipo
+$ensaladas = getProductsByType($conn, 'ensalada');
+$carnes = getProductsByType($conn, 'carne');
+$bebidas = getProductsByType($conn, 'bebida');
+$extras = getProductsByType($conn, 'extra');
 ?>
 
 <!DOCTYPE html>
@@ -14,197 +39,96 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['rol'] !== 'usuario') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kiosco Saludable</title>
-    <link rel="stylesheet" href="style.css">
+    <?php include 'ui.php'; renderStylesheetLinks(); ?>
 </head>
 <body>
-    <div class="header">
-        <div class="burger-menu" id="burgerMenu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-        <h1>KIOSCO SALUDABLE</h1>
-    </div>
+    <?php renderHeader(); ?>
     
     <div class="main-content">
         <h2 class="section-title">Ensaladas Preparadas</h2>
         <div class="category-container">
-            <div class="category">
-                <div class="category-image">
-                    <img src="https://placehold.co/600x400" alt="Ensalada César">
-                </div>
-                <div class="category-info">
-                    <h3>César</h3>
-                    <p>Lechuga, pollo, crutones, parmesano, bebida</p>
-                    <a href="#" class="go-btn">Elegir »</a>
-                </div>
-            </div>
-            
-            <div class="category">
-                <div class="category-image">
-                    <img src="https://placehold.co/600x400" alt="Ensalada Mediterránea">
-                </div>
-                <div class="category-info">
-                    <h3>Mediterránea</h3>
-                    <p>Tomate, pepino, aceitunas, feta, bebida</p>
-                    <a href="#" class="go-btn">Elegir »</a>
-                </div>
-            </div>
-            
-            
-            <div class="category">
-                <div class="category-image">
-                    <img src="https://placehold.co/600x400" alt="Ensalada Quinoa">
-                </div>
-                <div class="category-info">
-                    <h3>Bowl Quinoa</h3>
-                    <p>Quinoa, vegetales, aguacate, bebida</p>
-                    <a href="#" class="go-btn">Elegir »</a>
-                </div>
-            </div>
-
-            <div class="category">
-                <div class="category-image">
-                    <img src="https://placehold.co/600x400" alt="Ensalada Verde">
-                </div>
-                <div class="category-info">
-                    <h3>Verde Mix</h3>
-                    <p>Mix de hojas verdes y semillas, bebida</p>
-                    <a href="#" class="go-btn">Elegir »</a>
-                </div>
-            </div>
+            <?php if (count($ensaladas) > 0): ?>
+                <?php foreach ($ensaladas as $ensalada): ?>
+                    <div class="category" data-price="<?php echo $ensalada['precio']; ?>">
+                        <div class="category-image">
+                            <img src="https://placehold.co/600x400" alt="<?php echo htmlspecialchars($ensalada['nombre']); ?>">
+                        </div>
+                        <div class="category-info">
+                            <h3><?php echo htmlspecialchars($ensalada['nombre']); ?></h3>
+                            <p><?php echo htmlspecialchars($ensalada['descripcion']); ?></p>
+                            <p class="precio">$<?php echo number_format($ensalada['precio'], 2, ',', '.'); ?></p>
+                            <a href="producto.php?id=<?php echo $ensalada['id']; ?>" class="go-btn">Elegir »</a>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>No hay ensaladas disponibles en este momento.</p>
+            <?php endif; ?>
         </div>
+        
+        <?php if (count($carnes) > 0): ?>
+        <h2 class="section-title">Carnes</h2>
+        <div class="category-container">
+            <?php foreach ($carnes as $carne): ?>
+                <div class="category" data-price="<?php echo $carne['precio']; ?>">
+                    <div class="category-image">
+                        <img src="https://placehold.co/600x400" alt="<?php echo htmlspecialchars($carne['nombre']); ?>">
+                    </div>
+                    <div class="category-info">
+                        <h3><?php echo htmlspecialchars($carne['nombre']); ?></h3>
+                        <p><?php echo htmlspecialchars($carne['descripcion']); ?></p>
+                        <p class="precio">$<?php echo number_format($carne['precio'], 2, ',', '.'); ?></p>
+                        <a href="producto.php?id=<?php echo $carne['id']; ?>" class="go-btn">Elegir »</a>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
 
+        <?php if (count($bebidas) > 0): ?>
         <h2 class="section-title">Bebidas Saludables</h2>
         <div class="category-container">
-            <div class="category">
-                <div class="category-image">
-                    <img src="https://placehold.co/600x400" alt="Agua Mineral">
+            <?php foreach ($bebidas as $bebida): ?>
+                <div class="category" data-price="<?php echo $bebida['precio']; ?>">
+                    <div class="category-image">
+                        <img src="https://placehold.co/600x400" alt="<?php echo htmlspecialchars($bebida['nombre']); ?>">
+                    </div>
+                    <div class="category-info">
+                        <h3><?php echo htmlspecialchars($bebida['nombre']); ?></h3>
+                        <p><?php echo htmlspecialchars($bebida['descripcion']); ?></p>
+                        <p class="precio">$<?php echo number_format($bebida['precio'], 2, ',', '.'); ?></p>
+                        <a href="producto.php?id=<?php echo $bebida['id']; ?>" class="go-btn">Elegir »</a>
+                    </div>
                 </div>
-                <div class="category-info">
-                    <h3>Agua Mineral</h3>
-                    <p>Con/Sin gas</p>
-                    <a href="#" class="go-btn">Elegir »</a>
-                </div>
-            </div>
-            
-            <div class="category">
-                <div class="category-image">
-                    <img src="https://placehold.co/600x400" alt="Jugo Natural">
-                </div>
-                <div class="category-info">
-                    <h3>Jugo Natural</h3>
-                    <p>Naranja/Pomelo/Mix</p>
-                    <a href="#" class="go-btn">Elegir »</a>
-                </div>
-            </div>
-            
-            <div class="category">
-                <div class="category-image">
-                    <img src="https://placehold.co/600x400" alt="Smoothie Verde">
-                </div>
-                <div class="category-info">
-                    <h3>Smoothie</h3>
-                    <p>Espinaca, manzana, jengibre</p>
-                    <a href="#" class="go-btn">Elegir »</a>
-                </div>
-            </div>
-            
-            <div class="category">
-                <div class="category-image">
-                    <img src="https://placehold.co/600x400" alt="Kombucha">
-                </div>
-                <div class="category-info">
-                    <h3>Kombucha</h3>
-                    <p>Varios sabores</p>
-                    <a href="#" class="go-btn">Elegir »</a>
-                </div>
-            </div>
+            <?php endforeach; ?>
         </div>
+        <?php endif; ?>
 
+        <?php if (count($extras) > 0): ?>
         <h2 class="section-title">Extras Saludables</h2>
         <div class="category-container">
-            <div class="category">
-                <div class="category-image">
-                    <img src="https://placehold.co/600x400" alt="Mix de Frutos Secos">
+            <?php foreach ($extras as $extra): ?>
+                <div class="category" data-price="<?php echo $extra['precio']; ?>">
+                    <div class="category-image">
+                        <img src="https://placehold.co/600x400" alt="<?php echo htmlspecialchars($extra['nombre']); ?>">
+                    </div>
+                    <div class="category-info">
+                        <h3><?php echo htmlspecialchars($extra['nombre']); ?></h3>
+                        <p><?php echo htmlspecialchars($extra['descripcion']); ?></p>
+                        <p class="precio">$<?php echo number_format($extra['precio'], 2, ',', '.'); ?></p>
+                        <a href="producto.php?id=<?php echo $extra['id']; ?>" class="go-btn">Elegir »</a>
+                    </div>
                 </div>
-                <div class="category-info">
-                    <h3>Frutos Secos</h3>
-                    <p>Mix variado de nuts</p>
-                    <a href="#" class="go-btn">Elegir »</a>
-                </div>
-            </div>
-            
-            <div class="category">
-                <div class="category-image">
-                    <img src="https://placehold.co/600x400" alt="Barritas">
-                </div>
-                <div class="category-info">
-                    <h3>Barritas</h3>
-                    <p>Cereal/Proteína</p>
-                    <a href="#" class="go-btn">Elegir »</a>
-                </div>
-            </div>
-            
-            <div class="category">
-                <div class="category-image">
-                    <img src="https://placehold.co/600x400" alt="Frutas">
-                </div>
-                <div class="category-info">
-                    <h3>Frutas</h3>
-                    <p>Frescas de estación</p>
-                    <a href="#" class="go-btn">Elegir »</a>
-                </div>
-            </div>
-            
-            <div class="category">
-                <div class="category-image">
-                    <img src="https://placehold.co/600x400" alt="Yogurt">
-                </div>
-                <div class="category-info">
-                    <h3>Yogurt</h3>
-                    <p>Natural con granola</p>
-                    <a href="#" class="go-btn">Elegir »</a>
-                </div>
-            </div>
+            <?php endforeach; ?>
         </div>
+        <?php endif; ?>
         
-        <div class="cart-icon" id="cartIcon">
-            <div class="cart-counter" id="cartCounter">0</div>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
-            </svg>
-        </div>
+        <?php renderCartIcon(); ?>
         
-        <div class="side-menu" id="sideMenu">
-            <h3>Menú</h3>
-            <ul>
-                <li><a href="#">Inicio</a></li>
-                <li><a href="#">Ensaladas</a></li>
-                <li><a href="#">Bebidas</a></li>
-                <li><a href="#">Extras</a></li>
-                <li><a href="#">Mi Cuenta</a></li>
-                <li><a href="#">Historial de Pedidos</a></li>
-            </ul>
-        </div>
+        <?php renderNavbar(); ?>
     </div>
     
-    <div class="cart-modal" id="cartModal">
-        <div class="cart-content">
-            <div class="cart-header">
-                <h2 class="cart-title">PEDIDO</h2>
-                <button class="close-cart" id="closeCart">&times;</button>
-            </div>
-            <div class="cart-items" id="cartItems">
-                <!-- Cart items will be added here dynamically -->
-            </div>
-            <div class="cart-total">
-                <span>Total:</span>
-                <span id="cartTotal">$0.00</span>
-            </div>
-            <button class="cart-checkout">Finalizar Pedido</button>
-        </div>
-    </div>
+    <?php renderCartModal(); ?>
     
     <script src="script.js"></script>
 </body>

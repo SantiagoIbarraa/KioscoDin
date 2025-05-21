@@ -60,6 +60,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const existingItem = cart.items.find(item => item.name === name)
         if (existingItem) {
             existingItem.quantity++
+            // Ensure we're using the correct price (in case it was updated)
+            existingItem.price = price
         } else {
             cart.items.push({
                 name,
@@ -185,7 +187,7 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault()
             const category = e.target.closest('.category')
             const name = category.querySelector('h3').textContent
-            const price = 1000 // Precio por defecto, se puede personalizar
+            const price = parseFloat(category.getAttribute('data-price') || 0)
             addToCart(name, price)
             
             // Mostrar modal del carrito
