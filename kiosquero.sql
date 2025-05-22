@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 21-05-2025 a las 01:45:50
+-- Tiempo de generación: 22-05-2025 a las 01:47:26
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.1.6
 
@@ -62,9 +62,16 @@ CREATE TABLE `productos` (
   `stock` int(11) NOT NULL,
   `fecha_agregado` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `tipo_producto` enum('ensalada','carne','bebida','extra') NOT NULL,
-  `precio` float NOT NULL
+  `precio` float NOT NULL,
+  `url` varchar(90) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Volcado de datos para la tabla `productos`
+--
+
+INSERT INTO `productos` (`id`, `nombre`, `descripcion`, `stock`, `fecha_agregado`, `tipo_producto`, `precio`, `url`) VALUES
+(1, 'HolaSDSAD', 'DSD', 5, '2025-05-21 23:32:52', 'extra', 9000, '');
 
 -- --------------------------------------------------------
 
@@ -166,7 +173,7 @@ ALTER TABLE `pedidos`
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `reseñas`

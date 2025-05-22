@@ -7,25 +7,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header class="header">
-        <div class="burger-menu" id="burgerMenu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-        <h1>KIOSCO SALUDABLE</h1>
-    </header>
-
-    <nav class="side-menu" id="sideMenu">
-        <h3>Menú</h3>
-        <ul>
-            <li><a href="index.html">Pedidos</a></li>
-            <li><a href="reviews.html">Reseñas</a></li>
-            <li><a href="stock.html">Stock</a></li>
-            <li><a href="cuenta.html">Mi Cuenta</a></li>
-            <li><a href="historial.html">Historial de Pedidos</a></li>
-        </ul>
-    </nav>
+<?php include 'header.php'; ?>
 
     <main class="main-content">
         <h2>Reseñas de Clientes</h2>
