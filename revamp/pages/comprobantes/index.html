@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Mis Comprobantes</title>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header>
+        <div class="menu-icon">
+            <i class="fas fa-bars"></i>
+        </div>
+        <h1>Mis Comprobantes</h1>
+        <div class="icons">
+            <i class="fas fa-user"></i>
+        </div>
+    </header>
+    
+    <nav class="side-nav">
+        <div class="nav-header">
+            <h3>Menú</h3>
+            <button class="close-nav">&times;</button>
+        </div>
+        <ul class="nav-links">
+            <li><a href="../index/index.html"><i class="fas fa-home"></i> Inicio</a></li>
+            <li><a href="#" class="active"><i class="fas fa-receipt"></i> Comprobantes</a></li>
+            <li><a href="#"><i class="fas fa-phone"></i> Contacto</a></li>
+        </ul>
+    </nav>
+    
+    <div class="overlay"></div>
+
+    <main class="comprobantes-container">
+        <div class="filters">
+            <div class="search-container">
+                <input type="text" placeholder="Buscar comprobante..." class="search-input">
+                <button class="search-button"><i class="fas fa-search"></i></button>
+            </div>
+            <div class="date-filter">
+                <label for="date-filter">Filtrar por fecha:</label>
+                <select id="date-filter" class="filter-select">
+                    <option value="all">Todos</option>
+                    <option value="today">Hoy</option>
+                    <option value="week">Esta semana</option>
+                    <option value="month">Este mes</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="comprobantes-list">
+            <div class="comprobante-card" data-id="1">
+                <div class="comprobante-header">
+                    <span class="comprobante-id">#0001</span>
+                    <span class="comprobante-date">27/05/2025</span>
+                </div>
+                <div class="comprobante-details">
+                    <div class="comprobante-info">
+                        <span class="comprobante-total">$24.50</span>
+                        <span class="comprobante-items">3 artículos</span>
+                    </div>
+                    <button class="view-comprobante">Ver Detalle</button>
+                </div>
+            </div>
+
+            <div class="comprobante-card" data-id="2">
+                <div class="comprobante-header">
+                    <span class="comprobante-id">#0002</span>
+                    <span class="comprobante-date">26/05/2025</span>
+                </div>
+                <div class="comprobante-details">
+                    <div class="comprobante-info">
+                        <span class="comprobante-total">$15.75</span>
+                        <span class="comprobante-items">2 artículos</span>
+                    </div>
+                    <button class="view-comprobante">Ver Detalle</button>
+                </div>
+            </div>
+
+            <div class="comprobante-card" data-id="3">
+                <div class="comprobante-header">
+                    <span class="comprobante-id">#0003</span>
+                    <span class="comprobante-date">25/05/2025</span>
+                </div>
+                <div class="comprobante-details">
+                    <div class="comprobante-info">
+                        <span class="comprobante-total">$32.10</span>
+                        <span class="comprobante-items">5 artículos</span>
+                    </div>
+                    <button class="view-comprobante">Ver Detalle</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Receipt Modal -->
+    <div class="receipt-modal">
+        <div class="receipt-content">
+            <div class="receipt-header">
+                <h2>Comprobante #<span id="receipt-id">0001</span></h2>
+                <button class="close-receipt">&times;</button>
+            </div>
+            <div class="receipt-body">
+                <div class="receipt-info">
+                    <div class="info-row">
+                        <span>Fecha:</span>
+                        <span id="receipt-date">27/05/2025 14:30</span>
+                    </div>
+                    <div class="info-row">
+                        <span>Estado:</span>
+                        <span class="status completed">Completado</span>
+                    </div>
+                </div>
+                
+                <div class="receipt-items">
+                    <h3>Detalle del pedido</h3>
+                    <div class="items-list">
+                        <div class="item">
+                            <span class="item-name">Café Americano</span>
+                            <span class="item-quantity">2x</span>
+                            <span class="item-price">$5.00</span>
+                        </div>
+                        <div class="item">
+                            <span class="item-name">Sandwich de Pollo</span>
+                            <span class="item-quantity">1x</span>
+                            <span class="item-price">$6.75</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="receipt-totals">
+                    <div class="total-row">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">$11.75</span>
+                    </div>
+                    <div class="total-row">
+                        <span>IVA (10%):</span>
+                        <span id="tax">$1.18</span>
+                    </div>
+                    <div class="total-row grand-total">
+                        <span>Total:</span>
+                        <span id="total">$12.93</span>
+                    </div>
+                </div>
+                
+                <div class="receipt-actions">
+                    <button class="btn-print"><i class="fas fa-print"></i> Imprimir</button>
+                    <button class="btn-download"><i class="fas fa-download"></i> Descargar PDF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

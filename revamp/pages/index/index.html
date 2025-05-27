@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>Mi Tienda</title>
+    <script src="script.js" defer></script>
 </head>
 <body>
     <header>
@@ -18,10 +19,44 @@
         </div>
     </header>
     
-    <!-- Floating Cart Button -->
+    <nav class="side-nav">
+        <div class="nav-header">
+            <h3>Menú</h3>
+            <span class="close-nav">&times;</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html"><i class="fas fa-home"></i> Inicio</a></li>
+            <li><a href="../comprobantes/index.html"><i class="fas fa-history"></i> Historial</a></li>
+            <li><a href="comprobantes/index.html"><i class="fas fa-receipt"></i> Comprobantes</a></li>
+            <li><a href="#"><i class="fas fa-phone"></i> Contacto</a></li>
+        </ul>
+    </nav>
+    
+    <div class="overlay"></div>
+    
     <div class="floating-cart">
         <i class="fas fa-shopping-cart"></i>
         <span class="cart-count">0</span>
+    </div>
+    
+    <div class="cart-panel">
+        <div class="cart-header">
+            <h3>Tu Carrito</h3>
+            <button class="close-cart">&times;</button>
+        </div>
+        <div class="cart-items">
+            <div class="empty-cart">
+                <i class="fas fa-shopping-cart"></i>
+                <p>Tu carrito está vacío</p>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span class="total-amount">$0.00</span>
+            </div>
+            <button class="checkout-btn">Pagar Ahora</button>
+        </div>
     </div>
 
     <div class="search-container">
