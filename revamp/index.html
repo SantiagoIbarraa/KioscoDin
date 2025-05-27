@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Mi Tienda</title>
+</head>
+<body>
+    <header>
+        <div class="menu-icon">
+            <i class="fas fa-bars"></i>
+        </div>
+        <h1>Mi Tienda</h1>
+        <div class="icons">
+            <i class="fas fa-user"></i>
+        </div>
+    </header>
+    
+    <!-- Floating Cart Button -->
+    <div class="floating-cart">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count">0</span>
+    </div>
+
+    <div class="search-container">
+        <input type="text" placeholder="Buscar productos..." class="search-input">
+        <button class="search-button"><i class="fas fa-search"></i></button>
+    </div>
+
+    <div class="categories">
+        <h2>Categorías</h2>
+        <div class="category-buttons">
+            <button class="category-btn active">Todos</button>
+            <button class="category-btn">Bebidas</button>
+            <button class="category-btn">Comida</button>
+            <button class="category-btn">Postres</button>
+            <button class="category-btn">Snacks</button>
+        </div>
+    </div>
+
+    <div class="products-section">
+        <h2>Todos los Productos</h2>
+        <div class="products-grid">
+            <div class="product-card">
+                <img src="https://placehold.co/600x400" alt="Café Americano">
+                <div class="product-info">
+                    <h3>Café Americano</h3>
+                    <p class="price">$2.50</p>
+                    <p class="description">Café negro tradicional preparado con granos de alta calidad.</p>
+                    <div class="quantity-control">
+                        <button class="quantity-btn minus">−</button>
+                        <span class="quantity">1</span>
+                        <button class="quantity-btn plus">+</button>
+                    </div>
+                    <button class="add-to-cart"><i class="fas fa-shopping-cart"></i> Añadir al Carrito</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://placehold.co/600x400" alt="Cappuccino">
+                <div class="product-info">
+                    <h3>Cappuccino</h3>
+                    <p class="price">$3.50</p>
+                    <p class="description">Espresso con leche vaporizada y espuma de leche.</p>
+                    <div class="quantity-control">
+                        <button class="quantity-btn minus">−</button>
+                        <span class="quantity">1</span>
+                        <button class="quantity-btn plus">+</button>
+                    </div>
+                    <button class="add-to-cart"><i class="fas fa-shopping-cart"></i> Añadir al Carrito</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://placehold.co/600x400" alt="Sandwich de Pollo">
+                <div class="product-info">
+                    <h3>Sandwich de Pollo</h3>
+                    <p class="price">$6.75</p>
+                    <p class="description">Pollo a la parrilla con vegetales frescos y pan artesanal.</p>
+                    <div class="quantity-control">
+                        <button class="quantity-btn minus">−</button>
+                        <span class="quantity">1</span>
+                        <button class="quantity-btn plus">+</button>
+                    </div>
+                    <button class="add-to-cart"><i class="fas fa-shopping-cart"></i> Añadir al Carrito</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://placehold.co/600x400" alt="Ensalada César">
+                <div class="product-info">
+                    <h3>Ensalada César</h3>
+                    <p class="price">$8.25</p>
+                    <p class="description">Lechuga romana, crutones, aderezo césar y queso parmesano.</p>
+                    <div class="quantity-control">
+                        <button class="quantity-btn minus">−</button>
+                        <span class="quantity">1</span>
+                        <button class="quantity-btn plus">+</button>
+                    </div>
+                    <button class="add-to-cart"><i class="fas fa-shopping-cart"></i> Añadir al Carrito</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://placehold.co/600x400" alt="Pastel de Chocolate">
+                <div class="product-info">
+                    <h3>Pastel de Chocolate</h3>
+                    <p class="price">$5.50</p>
+                    <p class="description">Delicioso pastel con capas de chocolate y ganache.</p>
+                    <div class="quantity-control">
+                        <button class="quantity-btn minus">−</button>
+                        <span class="quantity">1</span>
+                        <button class="quantity-btn plus">+</button>
+                    </div>
+                    <button class="add-to-cart"><i class="fas fa-shopping-cart"></i> Añadir al Carrito</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://placehold.co/600x400" alt="Yogurt con Fresas">
+                <div class="product-info">
+                    <h3>Yogurt con Fresas</h3>
+                    <p class="price">$4.25</p>
+                    <p class="description">Yogurt natural con fresas frescas y miel.</p>
+                    <div class="quantity-control">
+                        <button class="quantity-btn minus">−</button>
+                        <span class="quantity">1</span>
+                        <button class="quantity-btn plus">+</button>
+                    </div>
+                    <button class="add-to-cart"><i class="fas fa-shopping-cart"></i> Añadir al Carrito</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://placehold.co/600x400" alt="Papas Fritas">
+                <div class="product-info">
+                    <h3>Papas Fritas</h3>
+                    <p class="price">$3.75</p>
+                    <p class="description">Papas fritas crujientes con sal marina.</p>
+                    <div class="quantity-control">
+                        <button class="quantity-btn minus">−</button>
+                        <span class="quantity">1</span>
+                        <button class="quantity-btn plus">+</button>
+                    </div>
+                    <button class="add-to-cart"><i class="fas fa-shopping-cart"></i> Añadir al Carrito</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://placehold.co/600x400" alt="Tabulé">
+                <div class="product-info">
+                    <h3>Tabulé</h3>
+                    <p class="price">$7.50</p>
+                    <p class="description">Ensalada de bulgur con perejil, tomate y especias.</p>
+                    <div class="quantity-control">
+                        <button class="quantity-btn minus">−</button>
+                        <span class="quantity">1</span>
+                        <button class="quantity-btn plus">+</button>
+                    </div>
+                    <button class="add-to-cart"><i class="fas fa-shopping-cart"></i> Añadir al Carrito</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
