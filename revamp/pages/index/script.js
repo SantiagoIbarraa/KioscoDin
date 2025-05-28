@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // DOM Elements
     const menuIcon = document.querySelector('.menu-icon')
     const sideNav = document.querySelector('.side-nav')
     const overlay = document.querySelector('.overlay')
@@ -6,92 +7,142 @@ document.addEventListener('DOMContentLoaded', function() {
     const cartIcon = document.querySelector('.floating-cart')
     const cartPanel = document.querySelector('.cart-panel')
     const closeCart = document.querySelector('.close-cart')
-    const addToCartButtons = document.querySelectorAll('.add-to-cart')
     const cartItemsContainer = document.querySelector('.cart-items')
     const cartCount = document.querySelector('.cart-count')
     const cartTotal = document.querySelector('.total-amount')
+    const categoryButtons = document.querySelectorAll('.category-btn')
+    const searchInput = document.querySelector('.search-input')
+    const searchButton = document.querySelector('.search-button')
     
-    let cart = []
+    let cart = JSON.parse(localStorage.getItem('cart')) || []
     
-    menuIcon.addEventListener('click', function() {
-        sideNav.classList.add('active')
-        overlay.classList.add('active')
-        document.body.style.overflow = 'hidden'
+    // Event Listeners
+    menuIcon.addEventListener('click', toggleSideNav)
+    closeNav.addEventListener('click', closeSideNav)
+    cartIcon.addEventListener('click', openCart)
+    closeCart.addEventListener('click', closeCartPanel)
+    overlay.addEventListener('click', closeAllPanels)
+    searchButton.addEventListener('click', handleSearch)
+    searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') handleSearch()
     })
     
-    closeNav.addEventListener('click', function() {
-        sideNav.classList.remove('active')
-        overlay.classList.remove('active')
-        document.body.style.overflow = ''
-    })
-    
-    cartIcon.addEventListener('click', function(e) {
-        e.stopPropagation()
-        cartPanel.classList.add('active')
-        overlay.classList.add('active')
-        document.body.style.overflow = 'hidden'
-    })
-    
-    closeCart.addEventListener('click', function() {
-        cartPanel.classList.remove('active')
-        overlay.classList.remove('active')
-        document.body.style.overflow = ''
-    })
-    
-    overlay.addEventListener('click', function() {
-        sideNav.classList.remove('active')
-        cartPanel.classList.remove('active')
-        overlay.classList.remove('active')
-        document.body.style.overflow = ''
-    })
-    
-    addToCartButtons.forEach(button => {
+    // Category filtering
+    categoryButtons.forEach(button => {
         button.addEventListener('click', function() {
-            const productCard = this.closest('.product-card')
-            const productName = productCard.querySelector('h3').textContent
-            const productPrice = parseFloat(productCard.querySelector('.price').textContent.replace('$', ''))
-            const productQuantity = parseInt(productCard.querySelector('.quantity').textContent)
-            const productImage = productCard.querySelector('img').src
+            const category = this.textContent.toLowerCase()
+            filterProducts(category)
             
-            const existingItem = cart.find(item => item.name === productName)
-            
-            if (existingItem) {
-                existingItem.quantity += productQuantity
-            } else {
-                cart.push({
-                    name: productName,
-                    price: productPrice,
-                    quantity: productQuantity,
-                    image: productImage
-                })
-            }
-            
-            updateCart()
-            
-            cartPanel.classList.add('active')
-            overlay.classList.add('active')
-            document.body.style.overflow = 'hidden'
-            
-            productCard.querySelector('.quantity').textContent = '1'
+            // Update active state
+            categoryButtons.forEach(btn => btn.classList.remove('active'))
+            this.classList.add('active')
         })
     })
     
-    document.querySelectorAll('.quantity-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const quantityElement = this.parentElement.querySelector('.quantity')
+    // Event delegation for dynamic content
+    document.addEventListener('click', function(e) {
+        // Handle add to cart
+        if (e.target.closest('.add-to-cart')) {
+            const button = e.target.closest('.add-to-cart')
+            const productCard = button.closest('.product-card')
+            const productId = button.getAttribute('data-id')
+            const productName = button.getAttribute('data-name')
+            const productPrice = parseFloat(button.getAttribute('data-price'))
+            const productQuantity = parseInt(productCard.querySelector('.quantity').textContent)
+            const productImage = productCard.querySelector('img').src
+            
+            addToCart({
+                id: productId,
+                name: productName,
+                price: productPrice,
+                quantity: productQuantity,
+                image: productImage
+            })
+            
+            // Reset quantity
+            productCard.querySelector('.quantity').textContent = '1'
+        }
+        
+        // Handle quantity buttons
+        if (e.target.closest('.quantity-btn')) {
+            const button = e.target.closest('.quantity-btn')
+            const quantityElement = button.parentElement.querySelector('.quantity')
             let quantity = parseInt(quantityElement.textContent)
             
-            if (this.classList.contains('plus')) {
+            if (button.classList.contains('plus')) {
                 quantity++
-            } else if (this.classList.contains('minus') && quantity > 1) {
+            } else if (button.classList.contains('minus') && quantity > 1) {
                 quantity--
             }
             
             quantityElement.textContent = quantity
-        })
+        }
+        
+        // Handle remove item from cart
+        if (e.target.closest('.remove-item')) {
+            const button = e.target.closest('.remove-item')
+            const index = parseInt(button.getAttribute('data-index'))
+            cart.splice(index, 1)
+            updateCart()
+        }
     })
     
+    // Functions
+    function toggleSideNav() {
+        sideNav.classList.add('active')
+        overlay.classList.add('active')
+        document.body.style.overflow = 'hidden'
+    }
+    
+    function closeSideNav() {
+        sideNav.classList.remove('active')
+        overlay.classList.remove('active')
+        document.body.style.overflow = ''
+    }
+    
+    function openCart(e) {
+        e.stopPropagation()
+        cartPanel.classList.add('active')
+        overlay.classList.add('active')
+        document.body.style.overflow = 'hidden'
+    }
+    
+    function closeCartPanel() {
+        cartPanel.classList.remove('active')
+        overlay.classList.remove('active')
+        document.body.style.overflow = ''
+    }
+    
+    function closeAllPanels() {
+        sideNav.classList.remove('active')
+        cartPanel.classList.remove('active')
+        overlay.classList.remove('active')
+        document.body.style.overflow = ''
+    }
+    
+    function addToCart(product) {
+        const existingItem = cart.find(item => item.id === product.id)
+        
+        if (existingItem) {
+            existingItem.quantity += product.quantity
+        } else {
+            cart.push({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                quantity: product.quantity,
+                image: product.image
+            })
+        }
+        
+        updateCart()
+        openCart({ stopPropagation: () => {} })
+    }
+    
     function updateCart() {
+        // Save cart to localStorage
+        localStorage.setItem('cart', JSON.stringify(cart))
+        
         const totalItems = cart.reduce((total, item) => total + item.quantity, 0)
         cartCount.textContent = totalItems
         
@@ -126,26 +177,53 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>`
                 cartItemsContainer.appendChild(cartItem)
             })
-            
-            document.querySelectorAll('.remove-item').forEach((button, index) => {
-                button.addEventListener('click', function() {
-                    cart.splice(index, 1)
-                    updateCart()
-                })
-            })
         }
 
         const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)
         cartTotal.textContent = `$${total.toFixed(2)}`
     }
     
+    function filterProducts(category) {
+        const products = document.querySelectorAll('.product-card')
+        
+        products.forEach(product => {
+            const productCategory = product.closest('.products-section').querySelector('h2').textContent.toLowerCase()
+            
+            if (category === 'todos' || productCategory === category) {
+                product.style.display = 'block'
+            } else {
+                product.style.display = 'none'
+            }
+        })
+    }
+    
+    function handleSearch() {
+        const searchTerm = searchInput.value.toLowerCase()
+        const products = document.querySelectorAll('.product-card')
+        
+        products.forEach(product => {
+            const productName = product.querySelector('h3').textContent.toLowerCase()
+            const productDesc = product.querySelector('.description').textContent.toLowerCase()
+            
+            if (productName.includes(searchTerm) || productDesc.includes(searchTerm)) {
+                product.style.display = 'block'
+            } else {
+                product.style.display = 'none'
+            }
+        })
+    }
+    
+    // Initialize
     updateCart()
     
-    cartPanel.addEventListener('click', function(e) {
-        e.stopPropagation()
-    })
-    
-    sideNav.addEventListener('click', function(e) {
-        e.stopPropagation()
+    // Close panels when clicking outside
+    window.addEventListener('click', function(e) {
+        if (!e.target.closest('.cart-panel') && !e.target.closest('.floating-cart')) {
+            closeCartPanel()
+        }
+        
+        if (!e.target.closest('.side-nav') && !e.target.closest('.menu-icon')) {
+            closeSideNav()
+        }
     })
 })
