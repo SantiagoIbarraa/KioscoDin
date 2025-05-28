@@ -210,11 +210,11 @@ document.addEventListener('DOMContentLoaded', function() {
     updateCart()
     
     window.addEventListener('click', function(e) {
-        if (!e.target.closest('.cart-panel') && !e.target.closest('.floating-cart')) {
+        if (cartPanel.classList.contains('active') && !e.target.closest('.cart-panel') && !e.target.closest('.floating-cart')) {
             closeCartPanel()
         }
         
-        if (!e.target.closest('.side-nav') && !e.target.closest('.menu-icon')) {
+        if (sideNav.classList.contains('active') && !e.target.closest('.side-nav') && !e.target.closest('.menu-icon')) {
             closeSideNav()
         }
     })

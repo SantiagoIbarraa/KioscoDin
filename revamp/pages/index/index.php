@@ -149,5 +149,6 @@ foreach ($categories as $category) {
             <p>No hay productos disponibles en este momento.</p>
         <?php } ?>
     </div>
+    <div id="overlay"></div>
 </body>
 </html>
