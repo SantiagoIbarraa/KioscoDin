@@ -2,7 +2,6 @@
 session_start();
 require_once 'db_connect.php';
 
-// Function to get all product categories from ENUM column
 function getProductCategories($conn) {
     $sql = "SELECT REPLACE(REPLACE(REPLACE(SUBSTRING(COLUMN_TYPE, 6, LENGTH(COLUMN_TYPE) - 6), ')' , ''), '\'', ''), ',', ', ') AS enum_values 
             FROM INFORMATION_SCHEMA.COLUMNS 
@@ -13,13 +12,11 @@ function getProductCategories($conn) {
     $row = $result->fetch_assoc();
     $enum_values = $row['enum_values'];
     
-    // Convert the comma-separated string into an array and trim whitespace
     $categories = array_map('trim', explode(',', $enum_values));
     
     return $categories;
 }
 
-// Function to get products by category
 function getProductsByCategory($conn, $category) {
     $sql = "SELECT * FROM productos WHERE tipo_producto = ? AND stock > 0";
     $stmt = $conn->prepare($sql);
@@ -35,7 +32,6 @@ function getProductsByCategory($conn, $category) {
     return $products;
 }
 
-// Get all categories and their products
 $categories = getProductCategories($conn);
 $category_products = [];
 

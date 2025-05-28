@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // DOM Elements
     const menuIcon = document.querySelector('.menu-icon')
     const sideNav = document.querySelector('.side-nav')
     const overlay = document.querySelector('.overlay')
@@ -16,7 +15,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     let cart = JSON.parse(localStorage.getItem('cart')) || []
     
-    // Event Listeners
     menuIcon.addEventListener('click', toggleSideNav)
     closeNav.addEventListener('click', closeSideNav)
     cartIcon.addEventListener('click', openCart)
@@ -27,21 +25,17 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.key === 'Enter') handleSearch()
     })
     
-    // Category filtering
     categoryButtons.forEach(button => {
         button.addEventListener('click', function() {
             const category = this.textContent.toLowerCase()
             filterProducts(category)
             
-            // Update active state
             categoryButtons.forEach(btn => btn.classList.remove('active'))
             this.classList.add('active')
         })
     })
     
-    // Event delegation for dynamic content
     document.addEventListener('click', function(e) {
-        // Handle add to cart
         if (e.target.closest('.add-to-cart')) {
             const button = e.target.closest('.add-to-cart')
             const productCard = button.closest('.product-card')
@@ -59,11 +53,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 image: productImage
             })
             
-            // Reset quantity
             productCard.querySelector('.quantity').textContent = '1'
         }
         
-        // Handle quantity buttons
         if (e.target.closest('.quantity-btn')) {
             const button = e.target.closest('.quantity-btn')
             const quantityElement = button.parentElement.querySelector('.quantity')
@@ -78,7 +70,6 @@ document.addEventListener('DOMContentLoaded', function() {
             quantityElement.textContent = quantity
         }
         
-        // Handle remove item from cart
         if (e.target.closest('.remove-item')) {
             const button = e.target.closest('.remove-item')
             const index = parseInt(button.getAttribute('data-index'))
@@ -87,7 +78,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     })
     
-    // Functions
     function toggleSideNav() {
         sideNav.classList.add('active')
         overlay.classList.add('active')
