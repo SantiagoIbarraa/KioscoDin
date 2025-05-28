@@ -130,7 +130,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function updateCart() {
-        // Save cart to localStorage
         localStorage.setItem('cart', JSON.stringify(cart))
         
         const totalItems = cart.reduce((total, item) => total + item.quantity, 0)
@@ -177,14 +176,19 @@ document.addEventListener('DOMContentLoaded', function() {
         const products = document.querySelectorAll('.product-card')
         
         products.forEach(product => {
-            const productCategory = product.closest('.products-section').querySelector('h2').textContent.toLowerCase()
-            
-            if (category === 'todos' || productCategory === category) {
-                product.style.display = 'block'
+            if (category === 'all' || category === 'todos') {
+                product.style.display = 'block';
             } else {
-                product.style.display = 'none'
+                const productElement = product.querySelector('.add-to-cart');
+                const productCategory = productElement ? productElement.getAttribute('data-category') : '';
+                
+                if (productCategory === category) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
             }
-        })
+        });
     }
     
     function handleSearch() {
@@ -203,10 +207,8 @@ document.addEventListener('DOMContentLoaded', function() {
         })
     }
     
-    // Initialize
     updateCart()
     
-    // Close panels when clicking outside
     window.addEventListener('click', function(e) {
         if (!e.target.closest('.cart-panel') && !e.target.closest('.floating-cart')) {
             closeCartPanel()

@@ -346,21 +346,26 @@ header h1 {
 .categories {
     margin: 30px auto;
     max-width: 1400px;
-    padding: 0 40px;
-}
-
-.categories h2 {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-    color: #333;
-    font-weight: 600;
+    padding: 0 20px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
 }
 
 .category-buttons {
     display: flex;
     gap: 10px;
     overflow-x: auto;
-    padding-bottom: 10px;
+    padding: 10px 20px;
+    justify-content: center;
+    width: 100%;
+    max-width: 100%;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.category-buttons::-webkit-scrollbar {
+    display: none;
 }
 
 .category-btn {
@@ -380,7 +385,7 @@ header h1 {
 }
 
 .products-section {
-    margin: 20px 0;
+    margin: 0;
 }
 
 .products-section h2 {
@@ -390,16 +395,13 @@ header h1 {
     font-weight: 600;
     font-size: 1.5rem;
     margin-bottom: 20px;
-    margin-left: 20px;
-}
-
-.products-section {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 20px;
+    margin-left: 0;
 }
 
 .products-grid {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 30px;

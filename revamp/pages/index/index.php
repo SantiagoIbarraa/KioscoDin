@@ -106,21 +106,21 @@ foreach ($categories as $category) {
     </div>
 
     <div class="categories">
-        <h2>Categorías</h2>
         <div class="category-buttons">
-            <button class="category-btn active">Todos</button>
+            <button class="category-btn active" data-category="all">Todos</button>
             <?php foreach ($categories as $category): ?>
-                <button class="category-btn"><?php echo ucfirst($category); ?></button>
+                <button class="category-btn" data-category="<?php echo $category; ?>"><?php echo ucfirst($category); ?></button>
             <?php endforeach; ?>
         </div>
     </div>
 
-    <?php foreach ($category_products as $category => $products): ?>
-    <div class="products-section">
-        <h2><?php echo ucfirst($category); ?></h2>
-        <div class="products-grid">
-            <?php if (!empty($products)): ?>
-                <?php foreach ($products as $product): ?>
+    <div class="products-grid">
+        <?php 
+        $has_products = false;
+        foreach ($category_products as $products) { 
+            if (!empty($products)) {
+                $has_products = true;
+                foreach ($products as $product) { ?>
                     <div class="product-card" data-id="<?php echo $product['id']; ?>">
                         <img src="https://placehold.co/600x400" alt="<?php echo htmlspecialchars($product['nombre']); ?>">
                         <div class="product-info">
@@ -135,17 +135,19 @@ foreach ($categories as $category) {
                             <button class="add-to-cart" 
                                     data-id="<?php echo $product['id']; ?>" 
                                     data-name="<?php echo htmlspecialchars($product['nombre']); ?>" 
+                                    data-category="<?php echo htmlspecialchars($product['tipo_producto']); ?>"
                                     data-price="<?php echo $product['precio']; ?>">
                                 <i class="fas fa-shopping-cart"></i> Añadir al Carrito
                             </button>
                         </div>
                     </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p>No hay productos en esta categoría en este momento.</p>
-            <?php endif; ?>
-        </div>
+                <?php 
+                }
+            }
+        } 
+        if (!$has_products) { ?>
+            <p>No hay productos disponibles en este momento.</p>
+        <?php } ?>
     </div>
-    <?php endforeach; ?>
 </body>
 </html>
