@@ -150,5 +150,51 @@ foreach ($categories as $category) {
         <?php } ?>
     </div>
     <div id="overlay"></div>
+    
+    <!-- Payment Modal -->
+    <div class="payment-modal" id="paymentModal">
+        <div class="payment-modal-content">
+            <div class="payment-modal-header">
+                <h3>Confirmar Pedido</h3>
+                <span class="close-payment-modal">&times;</span>
+            </div>
+            <div class="payment-modal-body">
+                <div class="order-summary">
+                    <h4>Resumen del Pedido</h4>
+                    <div id="orderItems">
+                        <!-- Order items will be inserted here by JavaScript -->
+                    </div>
+                    <div class="order-total">
+                        <strong>Total: </strong>
+                        <span id="orderTotal">0.00$</span>
+                    </div>
+                </div>
+                <div class="payment-options">
+                    <h4>Método de Pago</h4>
+                    <div class="payment-methods">
+                        <div class="payment-method" data-method="efectivo">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>Efectivo</span>
+                        </div>
+                        <div class="payment-method" data-method="tarjeta">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Tarjeta</span>
+                        </div>
+                        <div class="payment-method" data-method="transferencia">
+                            <i class="fas fa-university"></i>
+                            <span>Transferencia</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="payment-modal-footer">
+                <button class="btn btn-secondary" id="cancelPayment">Cancelar</button>
+                <button class="btn btn-primary" id="confirmPayment">Confirmar Pago</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
 </body>
 </html>

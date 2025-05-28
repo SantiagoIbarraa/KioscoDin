@@ -207,6 +207,84 @@ document.addEventListener('DOMContentLoaded', function() {
         })
     }
     
+    const paymentModal = document.getElementById('paymentModal')
+    const closePaymentModal = document.querySelector('.close-payment-modal')
+    const cancelPaymentBtn = document.getElementById('cancelPayment')
+    const confirmPaymentBtn = document.getElementById('confirmPayment')
+    const orderItemsContainer = document.getElementById('orderItems')
+    const orderTotalElement = document.getElementById('orderTotal')
+    const paymentMethods = document.querySelectorAll('.payment-method')
+    const checkoutBtn = document.querySelector('.checkout-btn')
+    let selectedPaymentMethod = null
+
+    paymentMethods.forEach(method => {
+        method.addEventListener('click', () => {
+            paymentMethods.forEach(m => m.classList.remove('active'))
+            method.classList.add('active')
+            selectedPaymentMethod = method.getAttribute('data-method')
+        })
+    })
+
+    checkoutBtn.addEventListener('click', openPaymentModal)
+
+    closePaymentModal.addEventListener('click', closePaymentModalFunc)
+    cancelPaymentBtn.addEventListener('click', closePaymentModalFunc)
+
+    confirmPaymentBtn.addEventListener('click', processPayment)
+
+
+    function openPaymentModal() {
+        if (cart.length === 0) {
+            alert('El carrito está vacío')
+            return
+        }
+        
+        closeCartPanel()
+
+        orderItemsContainer.innerHTML = ''
+        let total = 0
+
+        cart.forEach(item => {
+            const itemElement = document.createElement('div')
+            itemElement.className = 'order-item'
+            itemElement.innerHTML = `
+                <span>${item.quantity}x ${item.name}</span>
+                <span>${(item.price * item.quantity).toFixed(2)}$</span>
+            `
+            orderItemsContainer.appendChild(itemElement)
+            total += item.price * item.quantity
+        })
+
+        orderTotalElement.textContent = `${total.toFixed(2)}$`
+        paymentModal.style.display = 'flex'
+        document.body.style.overflow = 'hidden'
+    }
+
+
+    function closePaymentModalFunc() {
+        paymentModal.style.display = 'none'
+        document.body.style.overflow = ''
+    }
+
+
+    function processPayment() {
+        if (!selectedPaymentMethod) {
+            alert('Por favor seleccione un método de pago')
+            return
+        }
+
+        console.log('Processing payment with method:', selectedPaymentMethod)
+        console.log('Order:', cart)
+        
+        alert(`Pago procesado con éxito mediante ${selectedPaymentMethod}`)
+        
+        cart = []
+        updateCart()
+        closePaymentModalFunc()
+        closeCartPanel()
+        closeSideNav()
+    }
+
     updateCart()
     
     window.addEventListener('click', function(e) {
@@ -216,6 +294,10 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (sideNav.classList.contains('active') && !e.target.closest('.side-nav') && !e.target.closest('.menu-icon')) {
             closeSideNav()
+        }
+
+        if (e.target === paymentModal) {
+            closePaymentModalFunc()
         }
     })
 })
