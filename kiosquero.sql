@@ -3,19 +3,13 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-05-2025 a las 01:47:26
+-- Tiempo de generación: 29-05-2025 a las 00:09:22
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Base de datos: `kiosquero`
@@ -61,7 +55,7 @@ CREATE TABLE `productos` (
   `descripcion` varchar(300) NOT NULL,
   `stock` int(11) NOT NULL,
   `fecha_agregado` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `tipo_producto` enum('ensalada','carne','bebida','extra') NOT NULL,
+  `tipo_producto` enum('ensalada','carne','bebida','extra','pizza') DEFAULT NULL,
   `precio` float NOT NULL,
   `url` varchar(90) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -71,7 +65,10 @@ CREATE TABLE `productos` (
 --
 
 INSERT INTO `productos` (`id`, `nombre`, `descripcion`, `stock`, `fecha_agregado`, `tipo_producto`, `precio`, `url`) VALUES
-(1, 'HolaSDSAD', 'DSD', 5, '2025-05-21 23:32:52', 'extra', 9000, '');
+(1, 'Hamburguesa', 'Hamburguesa con queso, lechuga y tomate', 5, '2025-05-28 21:20:43', 'carne', 9000, ''),
+(2, 'Ensalada', 'Ensalada cesar', 4, '2025-05-28 21:18:04', 'ensalada', 5400, ''),
+(3, 'CocaCola zero', 'Cocacola sin azucares agregados', 5, '2025-05-28 21:19:10', 'bebida', 2000, ''),
+(4, 'Criollitas', 'Galletitas de agua', 20, '2025-05-28 21:21:14', 'extra', 1000.5, '');
 
 -- --------------------------------------------------------
 
@@ -173,7 +170,7 @@ ALTER TABLE `pedidos`
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `reseñas`
@@ -211,7 +208,3 @@ ALTER TABLE `reseñas`
   ADD CONSTRAINT `reseñas_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`),
   ADD CONSTRAINT `reseñas_ibfk_2` FOREIGN KEY (`id_pedido`) REFERENCES `pedidos` (`id`);
 COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
