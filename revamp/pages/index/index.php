@@ -94,7 +94,7 @@ foreach ($categories as $category) {
         <div class="cart-footer">
             <div class="cart-total">
                 <span>Total:</span>
-                <span class="total-amount">$0.00</span>
+                <span class="total-amount">0.00$</span>
             </div>
             <button class="checkout-btn">Pagar Ahora</button>
         </div>
@@ -125,7 +125,7 @@ foreach ($categories as $category) {
                         <img src="https://placehold.co/600x400" alt="<?php echo htmlspecialchars($product['nombre']); ?>">
                         <div class="product-info">
                             <h3><?php echo htmlspecialchars($product['nombre']); ?></h3>
-                            <p class="price">$<?php echo number_format($product['precio'], 2, '.', ','); ?></p>
+                            <p class="price"><?php echo number_format($product['precio'], 2, '.', ','); ?>$</p>
                             <p class="description"><?php echo htmlspecialchars($product['descripcion']); ?></p>
                             <div class="quantity-control">
                                 <button class="quantity-btn minus">−</button>
