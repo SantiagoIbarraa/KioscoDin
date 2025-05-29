@@ -56,8 +56,10 @@ foreach ($categories as $category) {
             <i class="fas fa-bars"></i>
         </div>
         <h1>Kiosco Saludable</h1>
-        <div class="icons">
-            <i class="fas fa-user"></i>
+        <div class="user-menu">
+            <a href="/kioscoDin/revamp/includes/logout.php" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Salir
+            </a>
         </div>
     </header>
     
