@@ -2,7 +2,6 @@
 session_start();
 require_once 'db_config.php';
 
-// Base URL for all redirects
 $base_url = 'http://' . $_SERVER['HTTP_HOST'] . '/kioscoDin/revamp';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -17,7 +16,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         if($stmt->rowCount() == 1) {
             $row = $stmt->fetch();
-            // In a real application, use password_verify() with hashed passwords
             if ($password === $row['contraseña']) {
                 $_SESSION['user_id'] = $row['id'];
                 $_SESSION['user_name'] = $row['nombre'];

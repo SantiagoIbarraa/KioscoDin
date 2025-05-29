@@ -2,7 +2,6 @@
 session_start();
 require_once 'db_config.php';
 
-// Base URL for all redirects
 $base_url = 'http://' . $_SERVER['HTTP_HOST'] . '/kioscoDin/revamp';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -12,7 +11,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
     
-    // Basic validation
     if ($password !== $confirm_password) {
         header("Location: $base_url/pages/register/?error=Las+contraseñas+no+coinciden");
         exit();
@@ -30,10 +28,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         }
         
-        // In a real application, hash the password: $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-        $hashed_password = $password; // Remove this in production
+        $hashed_password = $password;
         
-        // Insert new user
         $sql = "INSERT INTO usuario (nombre, apellido, contraseña, mail, rol) VALUES (:nombre, :apellido, :password, :email, 'usuario')";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR);

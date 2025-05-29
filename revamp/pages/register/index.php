@@ -1,7 +1,8 @@
 <?php
 session_start();
 if (isset($_SESSION['user_id'])) {
-    header('Location: /revamp/pages/index/');
+    $base_url = 'http://' . $_SERVER['HTTP_HOST'] . '/kioscoDin/revamp';
+    header("Location: $base_url/pages/index/");
     exit();
 }
 ?>
