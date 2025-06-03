@@ -9,7 +9,7 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['rol'] !== 'kiosquero') {
 }
 
 // Obtener productos para mostrar en el panel
-$query_productos = "SELECT id, nombre, tipo_producto, stock, precio FROM productos ORDER BY nombre ASC LIMIT 6";
+$query_productos = "SELECT id, nombre, descripcion, tipo_producto, stock, precio, url FROM productos ORDER BY nombre ASC LIMIT 6";
 $productos_recientes = $conn->query($query_productos);
 
 // Contar total de productos por tipo
@@ -103,8 +103,11 @@ $productos_stock_bajo = $conn->query($query_productos_stock_bajo)->fetch_assoc()
                                 <div class="product-image">
                                     <?php 
                                     if (!empty($producto['url'])): 
+                                        // Verificar si es una URL externa o una ruta local
+                                        $url = $producto['url'];
+                                        $es_url_externa = (strpos($url, 'http://') === 0 || strpos($url, 'https://') === 0);
                                     ?>
-                                        <img src="../<?php echo htmlspecialchars($producto['url']); ?>" alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
+                                        <img src="<?php echo $es_url_externa ? htmlspecialchars($url) : '../' . htmlspecialchars($url); ?>" alt="<?php echo htmlspecialchars($producto['nombre']); ?>">
                                     <?php else: ?>
                                         <div class="no-image"></div>
                                     <?php endif; ?>
@@ -151,6 +154,30 @@ $productos_stock_bajo = $conn->query($query_productos_stock_bajo)->fetch_assoc()
 
     <!-- Modal de Edición de Producto -->
     <div id="modalEditarProducto" class="modal">
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Función para mostrar vista previa de URL de imagen
+        const urlInput = document.getElementById('url_imagen');
+        const urlPreview = document.getElementById('url-preview');
+        const urlImagenPreview = document.getElementById('url-imagen-preview');
+        
+        if (urlInput) {
+            urlInput.addEventListener('input', function() {
+                const url = this.value.trim();
+                if (url) {
+                    urlPreview.style.display = 'block';
+                    urlImagenPreview.src = url;
+                    urlImagenPreview.onerror = function() {
+                        urlPreview.style.display = 'none';
+                        alert('No se pudo cargar la imagen desde la URL proporcionada');
+                    };
+                } else {
+                    urlPreview.style.display = 'none';
+                }
+            });
+        }
+    });
+    </script>
         <div class="modal-content">
             <div class="modal-header">
                 <h2>Editar Producto</h2>
@@ -193,12 +220,23 @@ $productos_stock_bajo = $conn->query($query_productos_stock_bajo)->fetch_assoc()
                     </div>
                     
                     <div class="form-group">
-                        <label for="imagen_modal">Imagen del producto:</label>
+                        <label for="url_imagen">URL de imagen (Google u otra fuente):</label>
+                        <input type="text" id="url_imagen" name="url_imagen" placeholder="https://ejemplo.com/imagen.jpg">
+                        <small class="form-text">Ingrese la URL completa de una imagen de Google u otra fuente</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>O suba una imagen desde su dispositivo:</label>
                         <input type="file" id="imagen_modal" name="imagen" accept="image/*">
                         <small class="form-text">Seleccione una imagen para el producto (JPG, PNG o GIF)</small>
                         <div id="imagen-preview-modal" style="margin-top: 10px; display: none;">
                             <p>Imagen actual:</p>
                             <img id="imagen-actual" src="" alt="Imagen del producto" style="max-width: 200px; max-height: 200px;">
+                        </div>
+                        <div id="url-preview" style="margin-top: 10px; display: none;">
+                            <p>Vista previa de URL:</p>
+                            <img id="url-imagen-preview" src="" alt="Vista previa de URL" style="max-width: 200px; max-height: 200px;">
+                        </div>
                         </div>
                         <input type="hidden" id="url" name="url">
                     </div>
@@ -222,14 +260,43 @@ $productos_stock_bajo = $conn->query($query_productos_stock_bajo)->fetch_assoc()
             document.getElementById('stock').value = stock;
             document.getElementById('tipo_producto').value = tipo;
             document.getElementById('precio').value = precio;
-            document.getElementById('url').value = url || '';
             
-            // Mostrar la imagen actual si existe
-            if (url && url.trim() !== '') {
-                document.getElementById('imagen-preview-modal').style.display = 'block';
-                document.getElementById('imagen-actual').src = '../' + url;
+            // Mostrar imagen actual si existe
+            const imagenPreview = document.getElementById('imagen-preview-modal');
+            const imagenActual = document.getElementById('imagen-actual');
+            const urlInput = document.getElementById('url_imagen');
+            const urlPreview = document.getElementById('url-preview');
+            
+            // Limpiar el campo de URL
+            if (urlInput) {
+                urlInput.value = '';
+            }
+            
+            // Ocultar la vista previa de URL
+            if (urlPreview) {
+                urlPreview.style.display = 'none';
+            }
+            
+            if (url && url !== '') {
+                // Verificar si es una URL externa (comienza con http:// o https://)
+                if (url.startsWith('http://') || url.startsWith('https://')) {
+                    if (urlInput) {
+                        urlInput.value = url;
+                        // Mostrar vista previa de URL
+                        const urlImagenPreview = document.getElementById('url-imagen-preview');
+                        if (urlPreview && urlImagenPreview) {
+                            urlPreview.style.display = 'block';
+                            urlImagenPreview.src = url;
+                        }
+                    }
+                    imagenPreview.style.display = 'none';
+                } else {
+                    // Es una ruta local
+                    imagenPreview.style.display = 'block';
+                    imagenActual.src = '../' + url;
+                }
             } else {
-                document.getElementById('imagen-preview-modal').style.display = 'none';
+                imagenPreview.style.display = 'none';
             }
             
             document.getElementById('modalEditarProducto').style.display = 'block';

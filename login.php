@@ -1,48 +1,82 @@
 <?php
 session_start();
 
-// Verificar si el usuario ya está logueado
-if (isset($_SESSION['usuario_id'])) {
+// Incluir la configuración de la base de datos
+require_once 'revamp/includes/db_config.php';
+
+// Verificar si el usuario ya está logueado (compatible con ambas versiones)
+if (isset($_SESSION['usuario_id']) || isset($_SESSION['user_id'])) {
+    // Obtener el rol del usuario (compatible con ambas versiones)
+    $rol = $_SESSION['rol'] ?? $_SESSION['user_role'] ?? '';
+    
     // Redirigir según el rol del usuario
-    if ($_SESSION['rol'] === 'usuario') {
+    if ($rol === 'usuario') {
         header("Location: usuario/index.php");
-    } elseif ($_SESSION['rol'] === 'kiosquero') {
+    } elseif ($rol === 'kiosquero') {
         header("Location: kiosquero/index.php");
-    } elseif ($_SESSION['rol'] === 'admin') {
+    } elseif ($rol === 'admin') {
         header("Location: administrador.php");
     }
     exit();
 }
 
+// Mostrar mensaje flash si existe
+$flash_message = '';
+$flash_type = '';
+
+if (isset($_SESSION['flash_message']) && isset($_SESSION['flash_message_type'])) {
+    $flash_message = $_SESSION['flash_message'];
+    $flash_type = $_SESSION['flash_message_type'];
+    unset($_SESSION['flash_message']);
+    unset($_SESSION['flash_message_type']);
+} elseif (isset($_SESSION['mensaje']) && isset($_SESSION['tipo_mensaje'])) {
+    $flash_message = $_SESSION['mensaje'];
+    $flash_type = $_SESSION['tipo_mensaje'];
+    unset($_SESSION['mensaje']);
+    unset($_SESSION['tipo_mensaje']);
+}
+
 // Procesar el formulario de login
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Conexión a la base de datos
-    $conn = new mysqli("localhost", "root", "", "kiosquero");
-    
-    // Verificar la conexión
-    if ($conn->connect_error) {
-        die("Error de conexión: " . $conn->connect_error);
-    }
+    // Conexión a la base de datos ya establecida a través de db_config.php
+    // $pdo está disponible desde el require_once anterior
     
     // Obtener datos del formulario
-    $email = $conn->real_escape_string($_POST['email']);
+    $email = trim($_POST['email']);
     $password = $_POST['password'];
     
     // Buscar usuario en la base de datos
-    $stmt = $conn->prepare("SELECT nombre, mail, contraseña, rol FROM usuario WHERE mail = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    $stmt = $pdo->prepare("SELECT id, nombre, apellido, mail, contraseña, rol FROM usuario WHERE mail = ?");
+    $stmt->execute([$email]);
     
-    if ($result->num_rows === 1) {
-        $user = $result->fetch_assoc();
+    if ($stmt->rowCount() === 1) {
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
         
-        // Verificar contraseña en texto plano
-        if ($password === $user['contraseña']) {
-            // Iniciar sesión
-            $_SESSION['usuario_id'] = $user['mail'];
+        // Verificar contraseña (sólo texto plano por ahora)
+        $password_verified = false;
+        
+        // Verificar contraseña en texto plano (versión original)
+        if (isset($user['contraseña']) && $password === $user['contraseña']) {
+            $password_verified = true;
+        }
+        
+        if ($password_verified) {
+            // Iniciar sesión (compatible con ambas versiones)
+            // Variables de sesión para la versión original
+            $_SESSION['usuario_id'] = $user['id'];
             $_SESSION['nombre'] = $user['nombre'];
             $_SESSION['rol'] = $user['rol'];
+            
+            // Variables de sesión para la versión revamp
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_name'] = $user['nombre'];
+            $_SESSION['user_role'] = $user['rol'];
+            
+            // Mensaje de éxito
+            $_SESSION['flash_message'] = "Bienvenido/a, {$user['nombre']}!";
+            $_SESSION['flash_message_type'] = "success";
+            $_SESSION['mensaje'] = "Bienvenido/a, {$user['nombre']}!";
+            $_SESSION['tipo_mensaje'] = "success";
             
             // Redirigir según el rol
             if ($user['rol'] === 'usuario') {
@@ -54,13 +88,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             exit();
         } else {
-            $error = "Contraseña incorrecta";
+            $error = "Credenciales inválidas. Por favor, inténtalo de nuevo.";
+            $_SESSION['flash_message'] = "Credenciales inválidas. Por favor, inténtalo de nuevo.";
+            $_SESSION['flash_message_type'] = "error";
         }
     } else {
-        $error = "Usuario no encontrado";
+        $error = "Usuario no encontrado. Por favor, verifica tu correo electrónico.";
+        $_SESSION['flash_message'] = "Usuario no encontrado. Por favor, verifica tu correo electrónico.";
+        $_SESSION['flash_message_type'] = "error";
     }
-    
-    $conn->close();
 }
 ?>
 

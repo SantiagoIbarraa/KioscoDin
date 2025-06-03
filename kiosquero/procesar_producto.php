@@ -22,8 +22,24 @@ if (isset($_POST['accion']) && $_POST['accion'] == 'editar') {
         $precio = (float)$_POST['precio'];
         $url = isset($_POST['url']) ? $_POST['url'] : '';
         
-        // Procesar la imagen si se ha subido una
-        if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0) {
+        // Procesar URL de imagen externa si se proporciona
+        if (isset($_POST['url_imagen']) && !empty($_POST['url_imagen'])) {
+            $url_imagen = trim($_POST['url_imagen']);
+            
+            // Verificar que la URL sea válida
+            if (filter_var($url_imagen, FILTER_VALIDATE_URL)) {
+                // Usar directamente la URL externa
+                $url = $url_imagen;
+            } else {
+                $_SESSION['mensaje'] = "La URL de imagen proporcionada no es válida.";
+                $_SESSION['tipo_mensaje'] = "warning";
+                header("Location: dashboard.php");
+                exit();
+            }
+        }
+        
+        // Procesar la imagen si se ha subido una y no se ha proporcionado una URL externa
+        if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == 0 && empty($_POST['url_imagen'])) {
             $imagen_nombre = $_FILES['imagen']['name'];
             $imagen_temp = $_FILES['imagen']['tmp_name'];
             $imagen_extension = strtolower(pathinfo($imagen_nombre, PATHINFO_EXTENSION));
