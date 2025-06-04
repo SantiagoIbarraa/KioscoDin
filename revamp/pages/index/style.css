@@ -414,9 +414,34 @@ header h1 {
     font-weight: bold;
 }
 
-.payment-options h4 {
-    margin: 20px 0 10px;
-    font-size: 1rem;
+.payment-options {
+    margin-top: 20px;
+}
+
+.payment-options .form-group {
+    margin-bottom: 20px;
+}
+
+.payment-options label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+}
+
+.payment-options input[type="datetime-local"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.payment-options input[type="datetime-local"]:focus {
+    outline: none;
+    border-color: #4a6bff;
+    box-shadow: 0 0 0 2px rgba(74, 107, 255, 0.2);
 }
 
 .payment-methods {

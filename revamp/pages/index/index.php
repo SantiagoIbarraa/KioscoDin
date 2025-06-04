@@ -50,7 +50,7 @@ foreach ($categories as $category) {
     <title>Kiosco Saludable</title>
     <script src="script.js" defer></script>
 </head>
-<body>
+<body data-user-id="<?php echo isset($_SESSION['user_id']) ? htmlspecialchars($_SESSION['user_id']) : '0'; ?>">
     <header>
         <div class="menu-icon">
             <i class="fas fa-bars"></i>
@@ -155,7 +155,7 @@ foreach ($categories as $category) {
     
     <!-- Payment Modal -->
     <div class="payment-modal" id="paymentModal">
-        <div class="payment-modal-content">
+        <form id="paymentForm" class="payment-modal-content">
             <div class="payment-modal-header">
                 <h3>Confirmar Pedido</h3>
                 <span class="close-payment-modal">&times;</span>
@@ -164,7 +164,6 @@ foreach ($categories as $category) {
                 <div class="order-summary">
                     <h4>Resumen del Pedido</h4>
                     <div id="orderItems">
-                        <!-- Order items will be inserted here by JavaScript -->
                     </div>
                     <div class="order-total">
                         <strong>Total: </strong>
@@ -172,6 +171,10 @@ foreach ($categories as $category) {
                     </div>
                 </div>
                 <div class="payment-options">
+                    <div class="form-group">
+                        <label for="deliveryTime">Fecha y hora de entrega</label>
+                        <input type="datetime-local" id="deliveryTime" class="form-control" required min="<?php echo date('Y-m-d\TH:i'); ?>">
+                    </div>
                     <h4>Método de Pago</h4>
                     <div class="payment-methods">
                         <div class="payment-method" data-method="efectivo">
@@ -190,9 +193,10 @@ foreach ($categories as $category) {
                 </div>
             </div>
             <div class="payment-modal-footer">
-                <button class="btn btn-secondary" id="cancelPayment">Cancelar</button>
-                <button class="btn btn-primary" id="confirmPayment">Confirmar Pago</button>
+                <button type="button" class="btn btn-secondary" id="cancelPayment">Cancelar</button>
+                <button type="submit" class="btn btn-primary" id="confirmPayment">Confirmar Pago</button>
             </div>
+        </form>
         </div>
     </div>
 

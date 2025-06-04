@@ -177,18 +177,18 @@ document.addEventListener('DOMContentLoaded', function() {
         
         products.forEach(product => {
             if (category === 'all' || category === 'todos') {
-                product.style.display = 'block';
+                product.style.display = 'block'
             } else {
-                const productElement = product.querySelector('.add-to-cart');
-                const productCategory = productElement ? productElement.getAttribute('data-category') : '';
+                const productElement = product.querySelector('.add-to-cart')
+                const productCategory = productElement ? productElement.getAttribute('data-category') : ''
                 
                 if (productCategory === category) {
-                    product.style.display = 'block';
+                    product.style.display = 'block'
                 } else {
-                    product.style.display = 'none';
+                    product.style.display = 'none'
                 }
             }
-        });
+        })
     }
     
     function handleSearch() {
@@ -230,7 +230,19 @@ document.addEventListener('DOMContentLoaded', function() {
     closePaymentModal.addEventListener('click', closePaymentModalFunc)
     cancelPaymentBtn.addEventListener('click', closePaymentModalFunc)
 
-    confirmPaymentBtn.addEventListener('click', processPayment)
+    const paymentForm = document.getElementById('paymentForm')
+    paymentForm.addEventListener('submit', async function(e) {
+        e.preventDefault()
+        
+        if (this.dataset.submitting) return
+        this.dataset.submitting = 'true'
+        
+        try {
+            await processPayment()
+        } finally {
+            delete this.dataset.submitting
+        }
+    })
 
 
     function openPaymentModal() {
@@ -267,22 +279,50 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 
-    function processPayment() {
+    async function processPayment() {
         if (!selectedPaymentMethod) {
             alert('Por favor seleccione un método de pago')
             return
         }
 
-        console.log('Processing payment with method:', selectedPaymentMethod)
-        console.log('Order:', cart)
-        
-        alert(`Pago procesado con éxito mediante ${selectedPaymentMethod}`)
-        
-        cart = []
-        updateCart()
-        closePaymentModalFunc()
-        closeCartPanel()
-        closeSideNav()
+        const deliveryTime = document.getElementById('deliveryTime').value
+        if (!deliveryTime) {
+            alert('Por favor seleccione una fecha y hora de entrega')
+            return
+        }
+
+        try {
+            const userId = document.body.getAttribute('data-user-id') || '0'
+            const response = await fetch('process_order.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: parseInt(userId, 10),
+                    deliveryTime: deliveryTime,
+                    paymentMethod: selectedPaymentMethod,
+                    items: cart
+                })
+            })
+
+
+            const result = await response.json()
+
+            if (response.ok) {
+                alert(`¡Pedido realizado con éxito! Número de pedido: ${result.orderId}`)
+                cart = []
+                updateCart()
+                closePaymentModalFunc()
+                closeCartPanel()
+                closeSideNav()
+            } else {
+                throw new Error(result.message || 'Error al procesar el pedido')
+            }
+        } catch (error) {
+            console.error('Error:', error)
+            alert('Error al procesar el pedido: ' + error.message)
+        }
     }
 
     updateCart()
